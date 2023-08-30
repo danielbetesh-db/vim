@@ -1,4 +1,4 @@
-##Getting Started
+## Getting Started:
 Follow the steps below to set up and run the project:
 1. **Installation**
 To install the necessary dependencies, navigate to the root of the project and run:

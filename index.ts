@@ -112,31 +112,31 @@ function getRelevantDoctorNames(
   doctors: Doctor[],
   queryParams: QueryParams
 ): string[] {
-  return doctors.reduce((names: string[], doctor) => {
-    if (doctor.score < queryParams.minScore) {
-      return names;
-    }
-    if (
-      queryParams.specialty &&
-      !doctor.specialties.find(
-        (f) =>
-          f.toLowerCase() === queryParams.specialty?.toString().toLowerCase()
-      )
-    ) {
-      return names;
-    }
-    if (queryParams.date) {
-      const isAvailable = doctor.availableDates.some(
-        (dateRange) =>
-          queryParams.date! >= dateRange.from &&
-          queryParams.date! <= dateRange.to
-      );
-      if (!isAvailable) {
-        return names;
+  return doctors
+    .filter((doctor) => {
+      if (doctor.score < (queryParams.minScore || 0)) {
+        return false;
       }
-    }
-    names.push(doctor.name);
-    //Fix only for the test
-    return names.reverse();
-  }, []);
+      if (
+        queryParams.specialty &&
+        !doctor.specialties.find(
+          (f) => f.toLowerCase() === queryParams.specialty?.toLowerCase()
+        )
+      ) {
+        return false;
+      }
+      if (queryParams.date) {
+        const isAvailable = doctor.availableDates.some(
+          (dateRange) =>
+            queryParams.date! >= dateRange.from &&
+            queryParams.date! <= dateRange.to
+        );
+        if (!isAvailable) {
+          return false;
+        }
+      }
+      return true;
+    })
+    .sort((a, b) => b.score - a.score) // Sort doctors by score in descending order
+    .map((doctor) => doctor.name); // Map the sorted array to get the doctor names
 }

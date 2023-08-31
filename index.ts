@@ -137,6 +137,6 @@ function getRelevantDoctorNames(
       }
       return true;
     })
-    .sort((a, b) => b.score - a.score) // Sort doctors by score in descending order
-    .map((doctor) => doctor.name); // Map the sorted array to get the doctor names
+    .sort((a, b) => b.score - a.score)
+    .map((doctor) => doctor.name);
 }

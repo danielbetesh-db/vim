@@ -1,0 +1,85 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Sample API
+  description: A sample API to demonstrate OpenAPI in Express
+
+paths:
+  /appointments:
+    get:
+      parameters:
+        - name: specialty
+          in: query
+          required: true
+          description: The specialty filter.
+          schema:
+            type: string
+        - name: date
+          in: query
+          required: true
+          description: The date filter.
+          schema:
+            type: integer
+            format: int64
+        - name: minScore
+          in: query
+          required: true
+          description: The minimum score filter.
+          schema:
+            type: number
+            format: float
+            minimum: 0
+            maximum: 10
+      responses:
+        '200':
+          description: Successful operation
+      summary: Get appointments
+      responses:
+        '200':
+          description: Get all appointments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    post:
+      summary: Request an appointment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name of the doctor.
+                date:
+                  type: integer
+                  format: int64
+                  description: Date for the appointment in milliseconds since the Unix epoch.
+              required:
+                - name
+                - date
+      responses:
+        '200':
+          description: Appointment is possible.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          description: Bad request. Doctor not found or not available.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
